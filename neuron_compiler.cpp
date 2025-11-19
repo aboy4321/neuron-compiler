@@ -1,17 +1,20 @@
 #include <iostream>
 #include <vector>
+#include <deque>
+#include <array>
+#include <set>
+#include <list>
 #include <memory>
 #include <algorithm>
 #include <utility>
-#include <stdexcept>
 
-using namespace std; 
+using namespace std;
 
 class Bounds{
     private:
         int lower_bound, upper_bound;
-    
-    public:     
+
+    public:
         Bounds(int lb, int ub) : lower_bound(lb), upper_bound(ub) {}
 
         static Bounds from_weights(const vector<int>& weights, int size) {
@@ -29,7 +32,7 @@ class Bounds{
                 }
             }
             return Bounds(lb, ub);
-        } 
+        }
 
         pair<int, int> get_bounds() const {
             return make_pair(lower_bound, upper_bound);
@@ -42,7 +45,7 @@ class ThresholdTest{
         int id;
         vector<int> weights;
         vector<int> indices;
-        int threshold; 
+        int threshold;
         int size;
         Bounds bounds;
 
@@ -50,8 +53,9 @@ class ThresholdTest{
         static int new_id() {
             return id_counter++;
         }
-        
+
     public:
+        int _count
         ThresholdTest(const vector<int>& weights, int threshold,
                  const vector<int>& indices, int size, const Bounds& bounds)
             : weights(weights), threshold(threshold), indices(indices),
@@ -59,11 +63,11 @@ class ThresholdTest{
 
         ThresholdTest(const vector<int>& weights, int threshold)
             : weights(weights), threshold(threshold), indices(),
-              size(weights.size()), 
+              size(weights.size()),
               bounds(Bounds::from_weights(weights, weights.size())),
               id(ThresholdTest::new_id()) {}
 
-        // gets last weight from list 
+        // gets last weight from list
         int get_last() const {
             return weights[size - 1];
         }
@@ -122,21 +126,41 @@ class ThresholdTest{
 
         int get_threshold() const { return threshold; }
 };
+class Counter {
+    private:
+    int size;
+    int passes = 0;
+    int fails = 0;
+    int count = 0;
+    double start_time;
+    std::vector<double> count_times;
+
+    static void add_counts(std::array<int, 2> a, std::array<int, 2> b) {
+        a[0] += b[0];
+        a[1] += b[1];
+    }
+    int propagate_count(ThresholdTest* test, std::vector<double> counts) {
+        std::deque<ThresholdTest> queue;
+
+
+        return count;
+    }
+    public:
+    std::vector<int> pass_count;
+};  std::vector<int> fail_count;
 
 int ThresholdTest::id_counter = 0;
 
-
 int main() {
     vector<int> weights = {2, -1, 3};
-    
+
     ThresholdTest test(weights, 2);
     cout << "original threshold:  " << test.get_threshold() << endl;
     auto test_1 = test.set_last(1);
-    cout << "nu threshold after set_last:  " << test_1->get_threshold() << endl;
+    cout << "new threshold after set_last:  " << test_1->get_threshold() << endl;
 
     if (test_1->trivial_pass()) cout << "trivial pass  " << endl;
     if (test_1->trivial_fail()) cout << "trivial fail  " << endl;
 
     return 0;
 }
-
