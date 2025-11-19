@@ -42,7 +42,7 @@ class Bounds{
 class ThresholdTest{
     private:
         static int id_counter;
-        int id;
+        
         vector<int> weights;
         vector<int> indices;
         int threshold;
@@ -55,7 +55,9 @@ class ThresholdTest{
         }
 
     public:
-        int _count
+
+        int _count;
+        int id;    
         ThresholdTest(const vector<int>& weights, int threshold,
                  const vector<int>& indices, int size, const Bounds& bounds)
             : weights(weights), threshold(threshold), indices(indices),
@@ -71,7 +73,8 @@ class ThresholdTest{
         int get_last() const {
             return weights[size - 1];
         }
-
+        
+        // sets last weight to either 0 or 1 and creates updated test 
         shared_ptr<ThresholdTest> set_last(int value) const {
             int last_weight = get_last();
             int nu_threshold = threshold;
@@ -92,7 +95,8 @@ class ThresholdTest{
             return make_shared<ThresholdTest>(weights, nu_threshold, indices, size - 1, nu_bounds);
 
         }
-
+        
+        // sorts weights by magnitude        
         static pair<vector<int>, vector<int>> sort_weights(const vector<int>& weights) {
             vector<pair<int, int>> indexed_weights;
             for (size_t i = 0; i < weights.size(); i++) {
@@ -129,26 +133,33 @@ class ThresholdTest{
 class Counter {
     private:
     int size;
-    int passes = 0;
-    int fails = 0;
-    int count = 0;
-    double start_time;
-    std::vector<double> count_times;
+        int passes = 0;
+        int fails = 0;
+        int count = 0;
+        double start_time;
+        std::vector<double> count_times;
 
-    static void add_counts(std::array<int, 2> a, std::array<int, 2> b) {
-        a[0] += b[0];
-        a[1] += b[1];
-    }
-    int propagate_count(ThresholdTest* test, std::vector<double> counts) {
-        std::deque<ThresholdTest> queue;
+        static void add_counts(std::array<int, 2>& a, std::array<int, 2>& b) {
+            a[0] += b[0];
+            a[1] += b[1];
+        }
 
+        int propagate_count(ThresholdTest* test, std::vector<double> counts) {
+            std::deque<ThresholdTest> queue;
+            std::list<ThresholdTest> visited_tests;
+            std::set<int> visited_ids;
 
-        return count;
-    }
+            visited_tests.push_back(*test);
+            visited_ids.insert(test->id);
+
+            int count;
+            return count;
+        }
     public:
-    std::vector<int> pass_count;
-};  std::vector<int> fail_count;
+        std::vector<int> pass_count;
+        std::vector<int> fail_count;
 
+};     
 int ThresholdTest::id_counter = 0;
 
 int main() {
