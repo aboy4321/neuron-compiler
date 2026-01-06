@@ -842,9 +842,23 @@ def visualize_counterfactual(image, path):
     #plt.show()
 
 if __name__ == '__main__':
+    EXPERIMENT0 = True
     EXPERIMENT1 = False
-    EXPERIMENT2 = True
+    EXPERIMENT2 = False
     iterate = False
+
+    if EXPERIMENT0:
+        #weights = [ 2, -1, 3 ]
+        weights = [ 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1 ]
+        threshold = 2        
+        test = ThresholdTest(weights, threshold)
+
+        print("dfs")
+        counter = Counter(test.size)
+        form_tree(None, test, counter=counter)
+        print("dfs-passes: %d" % counter.passes)
+        print("dfs-fails:  %d" % counter.fails)
+
 
     if EXPERIMENT1:
         pickle_filename = "experiment1.pickle"

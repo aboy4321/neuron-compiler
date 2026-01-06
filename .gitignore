@@ -11,3 +11,7 @@ __pycache__/
 *.pickle
 *.txt
 index.html
+texput.log
+valgrind.log
+threshold_test
+a.out
